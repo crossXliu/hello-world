@@ -12,6 +12,7 @@ let g:airline_theme='gruvbox'
 " line num
 set nu
 set relativenumber
+set incsearch
 " ----------------------------------------------------
 "                      QuickFix Conf
 " ----------------------------------------------------
