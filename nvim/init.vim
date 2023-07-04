@@ -3,7 +3,7 @@
 " ----------------------------------------------------
 " plugins linked to .config/nvim/lua/plugins.lua
 lua require('plugins')
-let g:mapleader = ","
+let g:mapleader = "," " for leader kermap
 " colorthemes
 set t_Co=256 " 256 colors terminal
 colorscheme gruvbox " enable gruvbox
@@ -12,7 +12,15 @@ let g:airline_theme='gruvbox'
 " line num
 set nu
 set relativenumber
+set cc=80
+
+" ----------------------------------------------------
+"                    Native Search Conf
+" ----------------------------------------------------
 set incsearch
+set hls
+noremap <leader>6 :nohlsearch<CR>
+
 " ----------------------------------------------------
 "                      QuickFix Conf
 " ----------------------------------------------------
@@ -20,6 +28,15 @@ noremap <F4> :cn<CR>
 noremap <F3> :cp<CR>
 noremap <leader>3 :copen<CR>
 noremap <leader>4 :ccl<CR>
+function ToggleQuickFix()
+	let winlist = getwininfo()
+	for win in winlist
+		if win.quickfix == 1 | :ccl | return | endif
+	endfor
+	:copen | :exec "normal! \<c-w>j"
+endfunction
+
+noremap <leader>1 :exec ToggleQuickFix()<CR>
 
 " ----------------------------------------------------
 "                      Buffers Conf
@@ -42,7 +59,7 @@ let g:Lf_ShortcutF = "<C-P>" " menu to nevigate files
 " search in current file
 noremap <C-B> :<C-U><C-R>=printf("Leaderf! rg --current-buffer -e '%s' ", expand("<cword>"))<CR>
 " search in all files
-noremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>
+noremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -e '%s'", expand("<cword>"))<CR>
 " search visually selected text literally
 xnoremap gf :<C-U><C-R>=printf("Leaderf! rg -F -e %s ", leaderf#Rg#visual())<CR>
 " reuse rg results before
@@ -62,7 +79,7 @@ noremap <leader>fm :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
 noremap <leader>ft :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
 noremap <leader>fl :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
 " function list
-noremap <leader>2 :<C-U><C-R>=printf("Leaderf function")<CR>
+noremap <leader>2 :<C-U><C-R>=printf("Leaderf function")<CR><CR>
 
 " ----------------------------------------------------
 "                      Ycm Conf
@@ -73,3 +90,4 @@ noremap <leader>cf :<C-U><C-R>=printf("YcmCompleter GoToSymbol %s", expand("<cwo
 noremap <leader>cc :YcmCompleter GoToCallers<CR>
 noremap <leader>ct :YcmCompleter GetType<CR>
 noremap <leader>ct :YcmCompleter GetParent<CR>
+noremap <leader>fm :YcmCompleter Format<CR>
